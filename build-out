@@ -1,0 +1,9 @@
+
+> cranix-common@1.0.0 build
+> tsc
+
+src/models/constants.ts(11,6): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+src/models/index.ts(4,15): error TS2307: Cannot find module './files' or its corresponding type declarations.
+src/models/secutiry-model.ts(2,5): error TS2564: Property 'services' has no initializer and is not definitely assigned in the constructor.
+src/models/secutiry-model.ts(3,5): error TS2564: Property 'ports' has no initializer and is not definitely assigned in the constructor.
+src/models/secutiry-model.ts(30,5): error TS2322: Type 'null' is not assignable to type 'string'.

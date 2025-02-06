@@ -1,0 +1,42 @@
+{
+  "name": "cranix-common",
+  "version": "1.0.0",
+  "description": "Common npm services, models and tools for CRANIX/CEPHALIX ",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "ng test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cranix-Solutions/npm-common.git"
+  },
+  "keywords": [
+    "CRANIX",
+    "CEPHALIX",
+    "shool",
+    "network",
+    "authentication",
+    "management"
+  ],
+  "author": "Helmuth Varkoly <hvarkoly@cephalix.eu>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cranix-Solutions/npm-common/issues"
+  },
+  "homepage": "https://github.com/Cranix-Solutions/npm-common#readme",
+  "devDependencies": {
+    "@angular/core": "",
+    "@angular/forms": "",
+    "@angular/router": "",
+    "@ionic/angular": "",
+    "@ionic/storage-angular": "",
+    "@ngx-translate/core":"",
+    "rrule": "",
+    "sprintf-js": "",
+    "typescript": "^5.7.3"
+  },
+  "files": [
+     "dist/**/*"
+  ]
+}
