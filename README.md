@@ -8,3 +8,4 @@ After all changes:
 # If no problems accured `git commit` otherwise fix it and test it again.
 # `npm login`
 # `npm publish`
+# `git push`
