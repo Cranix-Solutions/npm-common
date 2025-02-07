@@ -1,6 +1,6 @@
 {
   "name": "cranix-common",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Common npm services, models and tools for CRANIX/CEPHALIX ",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,16 @@
     "url": "https://github.com/Cranix-Solutions/npm-common/issues"
   },
   "homepage": "https://github.com/Cranix-Solutions/npm-common#readme",
+  "dependencies": {
+    "@angular/core": "",
+    "@angular/forms": "",
+    "@angular/router": "",
+    "@ionic/angular": "",
+    "@ionic/storage-angular": "",
+    "@ngx-translate/core":"",
+    "rrule": "",
+    "sprintf-js": ""
+  },
   "devDependencies": {
     "@angular/core": "",
     "@angular/forms": "",
