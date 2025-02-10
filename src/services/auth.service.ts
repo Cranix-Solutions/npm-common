@@ -9,8 +9,8 @@ import { isDevMode } from '@angular/core';
 
 //Own modules
 import { UtilsService } from './utils.service';
-import { UserResponse, LoginForm, Settings, ServerResponse, Crx2faSession } from '../models/server-models';
 import { LanguageService } from './language.service';
+import { LoginForm, Settings, ServerResponse, CrxSession, Crx2faSession } from '../models/server-models';
 import { TeachingSubject } from '../models/data-model';
 
 @Injectable({
@@ -26,7 +26,7 @@ export class AuthenticationService {
     url: string = "";
     //Token will be used only for CEPHALIX connections to overhand the CRANIX session
     token: string = "";
-    session: UserResponse|undefined = new UserResponse();
+    session: CrxSession = new CrxSession();
     settings: Settings|undefined;
     error: string = "";
     headers: HttpHeaders = new HttpHeaders();
@@ -65,7 +65,7 @@ export class AuthenticationService {
     login(user: LoginForm) {
         console.log("auth.services.login called:", user)
         this.url = this.hostname + "/sessions/create";
-        return this.http.post<UserResponse>(this.url, user, { headers: this.anonHeaders });
+        return this.http.post<CrxSession>(this.url, user, { headers: this.anonHeaders });
     }
 
     loadSettings() {
@@ -121,8 +121,8 @@ export class AuthenticationService {
         });
     }
     setupSessionByToken(token: string) {
-        this.http.get<UserResponse>(this.hostname + "/sessions/byToken/" + token).subscribe({
-            next: (val) => {
+        this.http.get<CrxSession>(this.hostname + "/sessions/byToken/" + token).subscribe({
+            next: (val: CrxSession) => {
                 this.session = val
                 this.setUpHeaders();
                 //this.loadSettings();
@@ -134,7 +134,7 @@ export class AuthenticationService {
                     this.error = "Ihr Token ist korrupt.";
                 }
             },
-            error: async (err) => {
+            error: async (err: any) => {
                 console.log(err)
                 switch (err.status) {
                     case 401: { this.error = "Ihr Token ist ungültig."; break; }
@@ -145,11 +145,11 @@ export class AuthenticationService {
         })
     }
     setUpSession(user: LoginForm, instituteName: string) {
-        this.session = new UserResponse();
+        this.session = new CrxSession();
         this.authenticationState.next(false);
         user.crx2faSessionId = this.utilsS.getCookie("crx2faSessionId");
         let subscription = this.login(user).subscribe({
-            next: (val) => {
+            next: (val: CrxSession) => {
                 console.log('login respons is', val);
                 this.session = val;
                 this.session['instituteName'] = instituteName;
@@ -170,7 +170,7 @@ export class AuthenticationService {
                     this.authenticationState.next(true);
                 }
             },
-            error: async (err) => {
+            error: async (err: any) => {
                 console.log('error is', err);
                 // From ionic 7
                 this.passwrodFalse = true;
@@ -210,12 +210,12 @@ export class AuthenticationService {
         });
         let data = { crx2faId: id, pin: otPin, token: this.session.token }
         this.http.post<Crx2faSession>(url, data, { headers: headers }).subscribe({
-            next: (val) => {
+            next: (val: Crx2faSession) => {
                 this.utilsS.setCookie("crx2faSessionId", val.id.toString(), val.validHours)
                 console.log(val)
                 this.authenticationState.next(true)
             },
-            error: async (err) => {
+            error: async (err: any) => {
                 // ionic 7
                 this.pinFalse = true;
                 const toast = this.toastController.create({
@@ -247,17 +247,17 @@ export class AuthenticationService {
             'Accept': "text/plain",
             'Authorization': "Bearer " + this.token
         });
-        let sub = this.http.get(url, { headers: this.headers }).subscribe({
-            next: (val) => {
+        let sub = this.http.get<CrxSession>(url, { headers: this.headers }).subscribe({
+            next: (val: CrxSession) => {
                 console.log("loadSession");
                 console.log(val);
-                this.session = <UserResponse>val;
+                this.session = val;
                 this.session['instituteName'] = sessionStorage.getItem('instituteName');
                 console.log(this.session);
                 this.loadSettings();
                 this.authenticationState.next(true);
             },
-            error: (err) => { console.log(err) },
+            error: (err: any) => { console.log(err) },
             complete: () => { sub.unsubscribe() }
         });
     }
@@ -266,17 +266,17 @@ export class AuthenticationService {
         if (!this.session) return;
         if (!sessionStorage.getItem('shortName')) {
             console.log('logout', this.session.token)
-            this.http.delete(this.hostname + `/sessions/${this.session.token}`, { headers: this.headers }).subscribe({
-                next: (val) => {
+            this.http.delete<ServerResponse>(this.hostname + `/sessions/${this.session.token}`, { headers: this.headers }).subscribe({
+                next: (val: ServerResponse) => {
                     this.authenticationState.next(false);
                     this.router.navigate(['/'])
                 },
-                error: (err) => { this.router.navigate(['/']) },
+                error: (err: any) => { this.router.navigate(['/']) },
                 complete: () => { this.router.navigate(['/']) }
             });
         }
         this.authenticationState.next(false);
-        this.session = undefined;
+        this.session = new CrxSession;
         this.use2fa = false;
         this.router.navigate(['/']);
     }

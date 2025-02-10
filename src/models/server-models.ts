@@ -42,7 +42,7 @@ export class Crx2faSession {
   crx2faSession?: Crx2faSession
 }
 */
-export class UserResponse {
+export class CrxSession {
         id: number = 0;
         createDate?: Date;
         validFrom?: Date;
@@ -63,7 +63,7 @@ export class UserResponse {
         name?: string;
         roomId?: string;
         roomName?: string;
-        instituteName?: string| null;
+        instituteName?: string | null;
         mustSetup2fa?: boolean;
         crx2fas?: string[];
 }
