@@ -18,6 +18,7 @@ import { TeachingSubject } from '../models/data-model';
 })
 
 export class AuthenticationService {
+    authorized: boolean = false;
     authenticationState = new BehaviorSubject(false);
     use2fa: boolean = false;
     crx2fa: string = "";
