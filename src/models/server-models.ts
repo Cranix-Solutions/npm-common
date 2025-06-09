@@ -134,3 +134,9 @@ export class MailAccess {
         action: string = "";
 }
 
+export class CrxTicketStatus {
+        N: number = 0;
+        R: number = 0;
+        W: number = 0;
+}
+

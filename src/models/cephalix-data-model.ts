@@ -44,6 +44,7 @@ export class Institute {
     ipTrNet: string = '';
     gwTrNet: string = '';
     nmTrNet: string = '';
+    deleted: boolean = false;
     adminPW: string = '';
     cephalixPW: string = '';
     created: any = new Date();
@@ -56,6 +57,7 @@ export class Ticket{
     id: number = 0;
     title: string = "";
     cephalixInstituteId: number = 0;
+    cephalixCustomerId: number = 0;
     cranixUserId: number = 0;
     cranixDeviceId: number = 0;
     creatorId: number = 0;

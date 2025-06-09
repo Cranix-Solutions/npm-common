@@ -1,0 +1,177 @@
+<form #editForm="ngForm">
+  <ion-header translucent>
+    <ion-toolbar color="primary">
+      @if(authService.isMD()){
+      <ion-label>{{ objectActionTitle | translate }}</ion-label>
+      }@else{
+      <ion-title>{{ objectActionTitle | translate }}</ion-title>
+      }
+      <ion-buttons slot="end">
+        @if(objectType == 'institute'){
+        <ion-button fill="clear" size="small" (click)="setNextDefaults()"
+          matTooltip="{{'Set the next default values' | translate }}" [disabled]="disabled">
+          <ion-icon slot="icon-only" name="refresh"></ion-icon>
+        </ion-button>
+        }
+        <ion-button class="ion-no-margin" (click)="onSubmit()" [disabled]="!editForm.valid || disabled">
+          <ion-icon slot="icon-only" color="success" name="checkmark-sharp"></ion-icon>
+        </ion-button>
+        @if(objectAction == 'modify' && objectType != 'settings'){
+        <ion-button fill="clear" size="small" (click)="deleteObject()" [disabled]="disabled">
+          <ion-icon slot="icon-only" color="danger" name="trash"></ion-icon>
+        </ion-button>
+        }
+        <ion-button fill="clear" size="small" (click)="closeWindow()" [disabled]="disabled">
+          <ion-icon slot="icon-only" color="danger" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content fullscreen>
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">
+      @for(key of objectKeys; track key){
+      @switch(objectService.typeOf(key,object,objectAction)) {
+      @case("file") {
+      <ion-item>
+        <ion-input type="file" multiple (change)="handleFileInput($event)"
+          label="{{ key | translate }}{{objectService.required[key]}}" [labelPlacement]="labelPlacement">
+        </ion-input>
+      </ion-item>
+      }
+      @case("number") {
+      <ion-item>
+        @if(objectService.selects[key]){
+        <ion-select type="number" [(ngModel)]="object[key]" name="{{key}}" [compareWith]="objectService.compareFn"
+          [required]="objectService.required[key]" [disabled]="key == 'role' && fixedRole" justify="space-between"
+          label="{{ key | translate }}" [labelPlacement]="labelPlacement">
+          @for(option of objectService.selects[key]; track option){
+          <ion-select-option value="{{option}}">{{option | translate}}</ion-select-option>
+          }
+        </ion-select>
+        }@else{
+        <ion-input type="number" [(ngModel)]="object[key]" name="{{key}}" value="{{object[key]}}"
+          label="{{ key | translate }}" [labelPlacement]="labelPlacement">
+        </ion-input>
+        }
+      </ion-item>
+      }
+      @case("numberRO") {
+      <ion-item>
+        <ion-input color="tertiary" type="number" [(ngModel)]="object[key]" name="{{key}}" value="{{object[key]}}"
+          label="{{ key | translate }}{{objectService.required[key]}}" [labelPlacement]="labelPlacement" readonly>
+        </ion-input>
+      </ion-item>
+      }
+      @case("booleanTrue") {
+      <ion-item>
+        <ion-toggle slot="end" [(ngModel)]="object[key]" name="{{key}}" color="secondary" justify="space-between"
+          checked>{{ key | translate
+          }}{{objectService.required[key]}}</ion-toggle>
+      </ion-item>
+      }
+      @case("booleanFalse") {
+      <ion-item>
+        <ion-toggle slot="end" [(ngModel)]="object[key]" name="{{key}}" color="secondary" justify="space-between">{{ key
+          | translate }}{{objectService.required[key]}}</ion-toggle>
+      </ion-item>
+      }
+      @case("string") {
+      <ion-item>
+        @if(editForm.controls[key] && editForm.controls[key].hasError('required') && editForm.controls[key].touched){
+        <ion-label position="stacked" color="danger">{{ 'This field is required!' | translate }}</ion-label>
+        }
+        @if(objectService.selects[key]){
+        <ion-select type="text" [(ngModel)]="object[key]" name="{{key}}" [compareWith]="objectService.compareFn"
+          [required]="objectService.required[key]" [disabled]="key == 'role' && fixedRole" justify="space-between"
+          label="{{ key | translate }}{{objectService.required[key]}}" [labelPlacement]="labelPlacement">
+          @for(option of objectService.selects[key]; track option){
+          <ion-select-option value="{{option}}">{{option | translate}}</ion-select-option>
+          }
+        </ion-select>
+        }@else{
+        <ion-input type="text" [(ngModel)]="object[key]" name="{{key}}" value="{{object[key]}}"
+          [required]="objectService.required[key]" [pattern]="getPattern(key)"
+          label="{{ key | translate }}{{objectService.required[key]}}" [labelPlacement]="labelPlacement"></ion-input>
+        }
+      </ion-item>
+      }
+      @case("stringRO") {
+      <ion-item>
+        <ion-input color="tertiary" type="text" value="{{object[key]}}"
+          label="{{ key | translate }}{{objectService.required[key]}}" [labelPlacement]="labelPlacement" readonly>
+        </ion-input>
+      </ion-item>
+      }
+      @case("text") {
+      <ion-item lines="none">
+        <ion-textarea color="tertiary" autoGrow="true" [(ngModel)]="object[key]" name="{{key}}" value="{{object[key]}}"
+          label="{{ key | translate }}{{objectService.required[key]}}" [labelPlacement]="labelPlacement">
+        </ion-textarea>
+      </ion-item>
+      }
+      @case("date") {
+      <ion-item [disabled]="objectService.readOnlyAttributes[key]">
+        <ion-label [position]="labelPlacement">{{ key | translate }}{{objectService.required[key]}}</ion-label>
+        <input [(ngModel)]="object[key]" name="{{key}}" type="date">
+      </ion-item>
+      }
+      @case("date-time") {
+      <ion-item [disabled]="objectService.readOnlyAttributes[key]">
+        <ion-label [position]="labelPlacement">{{ key | translate }}{{objectService.required[key]}}</ion-label>
+        <input [(ngModel)]="object[key]" name="{{key}}" type="datetime-local">
+      </ion-item>
+      }
+      @case("idPipeRO") {
+      <ion-item>
+        <ion-input color="tertiary" type="text" [value]="objectService.idToName(key,object[key])"
+          label="{{ key | translate }}{{objectService.required[key]}}" [labelPlacement]="labelPlacement" readonly>
+        </ion-input>
+      </ion-item>
+      }
+      @case("idPipe") {
+      <ion-item>
+        @if(editForm.controls[key] && editForm.controls[key].hasError('required') && editForm.controls[key].touched){
+        <ion-label position="stacked" color="danger">{{ 'This field is required!' | translate }}</ion-label>
+        }
+        @if(objectService.selects[key]){
+        <ion-select type="text" [(ngModel)]="object[key]" name="{{key}}" [compareWith]="objectService.compareFn"
+          [required]="objectService.required[key]" label="{{ key | translate}}{{objectService.required[key]}}"
+          [labelPlacement]="labelPlacement">
+          @for(option of objectService.selects[key]; track option ){
+          <ion-select-option value="{{option}}">{{option |idToName:objectService.idToPipe(key)}}</ion-select-option>
+          }
+        </ion-select>
+        }@else{
+        <ion-input readonly type="text" [value]="objectService.idToName(key,object[key])"
+          [required]="objectService.required[key]">
+        </ion-input>
+        }
+      </ion-item>
+      }
+      @case("idsPipe") {
+      <ion-item>
+        <ion-select class="select-full-width wrap-no" type="text" [(ngModel)]="object[key]" name="{{key}}"
+          [compareWith]="objectService.compareFn" [required]="objectService.required[key]" multiple="true"
+          justify="space-between"
+          label="{{ key.substring(0,key.length -1 ) | translate }}{{objectService.required[key]}}"
+          [labelPlacement]="labelPlacement">
+          @for(option of objectService.selects[key.substring(0,key.length -1 )]; track option){
+          <ion-select-option value="{{option}}">
+            {{option | idToName:objectService.idToPipe(key.substring(0,key.length -1 )) | translate }}
+          </ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+      }
+      @case("multivalued") {
+      <ion-item>
+        <ion-input type="text" [(ngModel)]="object[key]" name="{{key}}" value="{{object[key]}}"
+          label="{{ key | translate }} {{'Comma separated list' | translate }}"
+          [labelPlacement]="labelPlacement"></ion-input>
+      </ion-item>
+      }
+      }
+      }
+    </ion-list>
+  </ion-content>
+</form>

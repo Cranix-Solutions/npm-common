@@ -1,0 +1,40 @@
+ion-item {
+    max-height: 60px;
+    --padding-start: 2px;
+}
+
+ion-note {
+    margin-left: 2px;
+    margin-right: 6px;
+}
+
+ion-checkbox {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+p {
+    font-size: min(1rem, 10px);
+    margin-top: 1px;
+    margin-bottom: 1px;
+    margin-left: 1px;
+    margin-right: 1px;
+    line-height: min(1rem, 12px);
+}
+
+.odd {
+    background-color: lightgray;
+}
+
+.pair {
+    background-color: darkgray;
+}
+
+.divclass {
+    flex: 1; /* Gleiche Breite, teilt den Platz gleich auf */
+    display: flex;
+    flex-direction: column; /* Für Zeilenaufteilung innerhalb der Divs, falls nötig */
+    overflow: hidden; /* Verhindert Überlauf */
+    text-overflow: ellipsis; /* Bei Überlauf "..." anzeigen */
+    white-space: nowrap; /* Kein Zeilenumbruch, Text bleibt in einer Zeile */
+  }

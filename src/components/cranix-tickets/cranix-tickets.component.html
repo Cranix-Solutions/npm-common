@@ -1,0 +1,90 @@
+@if(selectedTicket){
+<ion-header>
+    <ion-title>
+        {{selectedTicket.title}}
+    </ion-title>
+    <ion-toolbar color="primary">
+        <ion-buttons>
+            @if(selectedTicket.id){
+            <ion-button fill="clear" size="small" (click)="addTicket()">
+                <ion-icon slot="icon-only" name="add"></ion-icon>
+            </ion-button>
+            }@else{
+            <ion-button fill="clear" size="small" (click)="closeTicket()">
+                <ion-icon slot="icon-only" name="checkmark-done"></ion-icon>
+            </ion-button>
+            }
+            <ion-button fill="clear" size="small" (click)="closeTicketModal()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-input label="{{'Title'|translate}}" placeHolder="{{'Enter title'|translate}}" [(ngModel)]="selectedTicket.title"></ion-input>
+</ion-header>
+<ion-grid size="fixed">
+    <ion-row>
+        <ion-col>
+            <ion-item>
+                <ion-label>{{'Rooms concerning the issue!'|translate}}</ion-label>
+                <cranix-search objectType="room" [(ngModel)]="selectedTicket.rooms"
+                    [ngModelOptions]="{standalone: true}" [items]="objectService.allObjects['room']"
+                    itemTextField="description" [multiple]="true"></cranix-search>
+            </ion-item>
+        </ion-col>
+        <ion-col>
+            <ion-item>
+                <ion-label>{{'Devices concerning the issue!'|translate}}</ion-label>
+                <cranix-search objectType="device" [(ngModel)]="selectedTicket.devices"
+                    [ngModelOptions]="{standalone: true}" [items]="objectService.allObjects['device']"
+                    itemTextField="name"  [multiple]="true"></cranix-search>
+            </ion-item>
+        </ion-col>
+        <ion-col>
+            <ion-item>
+                <ion-label>{{'Printers concerning the issue!'|translate}}</ion-label>
+                <cranix-search objectType="device" [(ngModel)]="selectedTicket.printers"
+                    [ngModelOptions]="{standalone: true}" [items]="objectService.allObjects['printer']"
+                    itemTextField="name"  [multiple]="true"></cranix-search>
+            </ion-item>
+        </ion-col>
+    </ion-row>
+</ion-grid>
+<ion-content>
+    @if(selectedTicket.id){
+    <ion-list>
+        @for(article of articles; track article.id){
+        <ion-item>
+            {{article.created|date:'yyyy-MM-dd  HH:mm'}}
+        </ion-item>
+        }
+    </ion-list>
+    }
+</ion-content>
+}@else{
+<ion-header>
+    <ion-title>
+        {{'Manage tickets'|translate}}
+    </ion-title>
+    <ion-toolbar color="primary">
+        <ion-buttons>
+            <ion-button fill="clear" size="small" (click)="openAddTicket()">
+                <ion-icon slot="icon-only" name="add"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" size="small" (click)="closeMainModal()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-list>
+        @for(ticket of tickets; track ticket.id){
+        <ion-item button detail>
+            {{ticket.title}}<br>
+            {{'created'|translate}}: {{ticket.created | date:'yyyy-MM-dd  HH:mm'}}<br>
+            {{'modified'|translate}}: {{ticket.modified | date:'yyyy-MM-dd  HH:mm'}}
+        </ion-item>
+        }
+    </ion-list>
+</ion-content>
+}

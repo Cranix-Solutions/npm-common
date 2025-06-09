@@ -1,0 +1,204 @@
+@if( !authService.isMD() ) {
+<ion-toolbar class="page-toolbar">
+  <ion-item lines="none">
+    <ion-input placeholder="{{'search' | translate }}" (input)="onQuickFilterChanged()" id="filterMD"
+      style="min-width: 400px;">
+    </ion-input>
+    @if( objectType == 'challenge' ) {
+      <cranix-search objectType="teachingSubject" [(ngModel)]="authService.selectedTeachingSubject"
+        [items]="crxObjectService.subjects" name="searchTeachingSubject" emptyLabel="teachingSubject">
+      </cranix-search>
+    }
+  </ion-item>
+  <ion-buttons slot="end">
+    <ion-button size="small" fill="solid" (click)="context.componentParent.redirectToEdit(null)"
+      matTooltip="{{'Create a new object' | translate }}">
+      <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+    </ion-button>
+    <ion-button size="small" fill="solid" (click)="context.componentParent.openActions($event,null)"
+      matTooltip="{{'Apply actions on the selected objects' | translate }}">
+      <ion-icon slot="icon-only" name="ellipsis-vertical-sharp"></ion-icon>
+    </ion-button>
+    @if( objectType == 'challenge' ) {
+    <ion-button *ngIf="objectType == 'challenge'" size="small" fill="solid" (click)="getCephalixChallenges()"
+      matTooltip="{{'Get challenges from CEPHALIX server to the selected subject.' | translate }}">
+      <img src="assets/images/logo/cranix_school.svg" style="height: 32px; width: 32px;">
+    </ion-button>
+    }
+  </ion-buttons>
+</ion-toolbar>
+} @else {
+<ion-item>
+  @if( objectType == 'challenge' ) {
+  <cranix-search objectType="teachingSubject" [(ngModel)]="authService.selectedTeachingSubject"
+    [items]="crxObjectService.subjects" name="searchTeachingSubject" emptyLabel="teachingSubject">
+  </cranix-search>
+  }
+  <ion-button expand="block" (click)="back()" [disabled]="min <= 0">
+    <ion-icon slot="start" name="arrow-back"></ion-icon>
+    {{ min + 2 }}
+  </ion-button>
+  <ion-searchbar placeholder="{{'search' | translate }}" (input)="onQuickFilterChanged()" id="filterMD"></ion-searchbar>
+  <ion-button expand="block" (click)="forward()" [disabled]="max >= rowData.length">
+    {{ max }}
+    <ion-icon slot="end" name="arrow-forward"></ion-icon>
+  </ion-button>
+</ion-item>
+<ion-fab slot="fixed" vertical="center" horizontal="end">
+  <ion-fab-button size="small">
+    <ion-icon name="arrow-forward-circle"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="start">
+    <ion-fab-button (click)="context.componentParent.openActions($event,null)">
+      <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
+    </ion-fab-button>
+    @if(objectType == 'printer'){
+    <ion-fab-button (click)="context.componentParent.addDevice($event)">
+      <ion-icon name="add-circle"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button (click)="context.componentParent.addPrinter($event)" disabled>
+      <ion-icon name="print-outline"></ion-icon>
+    </ion-fab-button>
+    }@else{
+    <ion-fab-button (click)="context.componentParent.redirectToEdit(null)">
+      <ion-icon name="add-circle"></ion-icon>
+    </ion-fab-button>
+    }
+    @if(objectType == 'challenge'){
+    <ion-fab-button size="small" fill="solid" (click)="getCephalixChallenges()"
+      matTooltip="{{'Get challenges from CEPHALIX server to the selected subject.' | translate }}">
+      <img src="assets/images/logo/cranix_school.svg" style="height: 32px; width: 32px;">
+    </ion-fab-button>
+    }
+  </ion-fab-list>
+</ion-fab>
+}
+<ion-list>
+  @for(object of rowData; track object.id; let i = $index; ){
+  @if(i > min && i < max) { <ion-item-sliding>
+    <ion-item style="background-color : {{authService.rowColors[i%2]}}" lines="none">
+      <ion-note slot="start">
+        <ion-checkbox (click)="$event.stopPropagation()" (ionChange)="checkChange($event,object)"></ion-checkbox>
+      </ion-note>
+      <div style="display: flex; width: 100%;">
+        <div class="divclass" (click)="context.componentParent.redirectToEdit(object)">
+          <p>{{ object[left1] }}</p>
+          <p>{{ object[left2] }} {{ object[left3] }}</p>
+        </div>
+        <div class="divclass">
+          @if(objectType == 'customer'){
+          <p>{{ object.contact }}</p>
+          <p>{{ object.telephone }}</p>
+          }
+          @else if(objectType == 'device') {
+          <p>{{ object.mac }}</p>
+          <p>{{ object.hwconfId | idToName:'hwconf' }}</p>
+          }
+          @else if(objectType.indexOf('group') != -1) {
+          <p>{{ object.groupType | translate }}</p>
+          }
+          @else if(objectType == 'hwconf'){
+          <p>{{ object.hwconfType | translate }}</p>
+          }
+          @else if(objectType == 'institute'){
+          <p>{{ object.locality }}</p>
+          <p>{{ object.instituteType | translate }}</p>
+          }
+          @else if(objectType == 'printer'){
+          <p>{{ object.model }}</p>
+          <p>{{ object.activeJobs }}</p>
+          }
+          @else if(objectType.indexOf('room') != -1){
+          <p>{{ object.roomType | translate }}</p>
+          <p>{{ object.roomControl | translate }}</p>
+          @if(object.hwconfId) {<p>{{ object.hwconfId | idToName:'hwconf' }}</p>}
+          }
+          @else if(objectType.indexOf('user') != -1){
+          <p>{{ object.role | translate }}</p>
+          <p>{{ object.classes }}</p>
+          }
+          @if(objectType == 'challenge' && object.creatorId == authService.session.userId) {
+          <ion-item>
+            @if(object.released){
+            @if(object.groups.length>0){
+            {{objectService.formatGroups(object.groups)}}
+            }
+            @if(object.users.length>0){
+            {{objectService.formatUsers(object.users)}}
+            }
+            }
+            <ion-buttons slot="end">
+              @if(object.released){
+              <ion-button (click)="context.componentParent.stopAndArchive(object)"
+                matTooltip="{{'Stop and evaluate challenge and archive the results.'|translate}}">
+                <ion-icon slot="icon-only" name="stop-circle-outline" color="danger"></ion-icon>
+              </ion-button>
+              }@else{
+              <ion-button (click)="context.componentParent.assign(object)"
+                matTooltip="{{'Assign and start challenge.'|translate}}">
+                <ion-icon slot="icon-only" name="chevron-forward-circle-outline"></ion-icon>
+              </ion-button>
+              <ion-button (click)="context.componentParent.deleteChallenge(object.id)"
+                matTooltip="{{'Delete challenge.'|translate}}">
+                <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+              </ion-button>
+              }
+              <ion-button (click)="context.componentParent.getArchives(object.id)"
+                matTooltip="{{'Manage the archived results of this challenge.'|translate}}">
+                <ion-icon slot="icon-only" name="archive"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+          }
+        </div>
+      </div>
+    </ion-item>
+    <ion-item-options side="end">
+      @if(objectType == 'institute' && object.ipVPN && object.ipVPN != ''){
+      <ion-item-option color="secondary" (click)="context.componentParent.routeInstitute(object)">
+        <ion-icon slot="icon-only" name="create-outline" style="height:15px;width:15px"></ion-icon>
+      </ion-item-option>
+      }
+      @if(objectType == 'room' || objectType == 'device'){
+      <ion-item-option color="warning" (click)="context.componentParent.setDhcp(object)">
+        <ion-icon slot="icon-only" name="server"></ion-icon>
+      </ion-item-option>
+      <ion-item-option (click)="context.componentParent.setPrinters(object)">
+        <ion-icon slot="icon-only" name="print"></ion-icon>
+      </ion-item-option>
+      }
+      @if(objectType == 'room'){
+      <ion-item-option *ngIf="" color="success" (click)="context.componentParent.devices(object)">
+        <ion-icon slot="icon-only" name="desktop"></ion-icon>
+      </ion-item-option>
+      }
+      @if(objectType == 'user'){
+      <ion-item-option (click)="context.componentParent.redirectToGroups(object)">
+        <ion-icon slot="icon-only" name="people"></ion-icon>
+      </ion-item-option>
+      }
+      @if(useNotice && (objectType.indexOf('user') != -1 || objectType.indexOf('group') != -1)){
+      <ion-item-option (click)="openNotice(object)">
+        <ion-icon slot="icon-only" name="clipboard" color="tertiary"></ion-icon>
+      </ion-item-option>
+      }
+      @if(objectType.indexOf('group') != -1 && (authService.isAllowed('group.modify') || authService.session.userId ==
+      object.creatorId)){
+      <ion-item-option (click)="context.componentParent.redirectToMembers(object)">
+        <ion-icon slot="icon-only" name="people-circle"></ion-icon>
+      </ion-item-option>
+      }
+      <ion-item-option color="tertiary" (click)="context.componentParent.openActions($event,object)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical-sharp"></ion-icon>
+      </ion-item-option>
+      @if(authService.session.userId == object.creatorId || authService.isAllowed(objectType + '.delete')){
+      <ion-item-option color="danger" (click)="context.componentParent.redirectToDelete(object)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-item-option>
+      }
+    </ion-item-options>
+    </ion-item-sliding>
+    }
+    }
+</ion-list>
+<!-- /ion-content -->
