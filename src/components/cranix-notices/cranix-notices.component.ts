@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular'
 import { AuthenticationService } from '../../services/auth.service';
 import { NoticesService } from '../../services/notices.service';
-import { CrxNotice } from '../models/data-model';
+import { CrxNotice } from '../../models/data-model';
 import { LanguageService } from '../../services/language.service';
 import { GenericObjectService } from '../../services/generic-object.service';
 import { CrxObjectService } from '../../services/crx-object-service';
@@ -13,15 +13,15 @@ import { CrxObjectService } from '../../services/crx-object-service';
 })
 export class CranixNoticesComponent implements OnInit {
 
-    issue: string;
+    issue: string = "";
     isDisabled: boolean = false;
     isNoticeOpen: boolean = false;
-    labels = {};
+    labels: { [key: number]: string} = {};
     notices: CrxNotice[] = []
     allNotices: CrxNotice[] = []
     selectedNotice: CrxNotice = new CrxNotice()
     selectedIssue: string = "";
-    @Input() objectType: string
+    @Input() objectType: string = ""
     @Input() selectedObject: any
     constructor(
         public authService: AuthenticationService,
@@ -41,7 +41,7 @@ export class CranixNoticesComponent implements OnInit {
     }
 
     readData() {
-        let tmp = []
+        let tmp: any[]= []
         let notice = new CrxNotice();
         notice.objectType = this.objectType
         notice.objectId = this.selectedObject.id

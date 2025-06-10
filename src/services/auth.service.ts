@@ -28,7 +28,7 @@ export class AuthenticationService {
     //Token will be used only for CEPHALIX connections to overhand the CRANIX session
     token: string = "";
     session: CrxSession = new CrxSession();
-    settings: Settings|undefined;
+    settings: Settings = new Settings();
     error: string = "";
     headers: HttpHeaders = new HttpHeaders();
     formHeaders: HttpHeaders = new HttpHeaders();

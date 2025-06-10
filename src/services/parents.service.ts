@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UtilsService } from './utils.service';
 import { AuthenticationService } from './auth.service';
-import { ParentTeacherMeeting, Room, PTMTeacherInRoom, PTMEvent, Parent, ParentRequest, User } from '../models/data-model';
+import { ParentTeacherMeeting, Room, PTMTeacherInRoom, PTMEvent, ParentRequest, User } from '../models/data-model';
 import { ServerResponse } from '../models/server-models';
 
 @Injectable()
 export class ParentsService {
 	hostname: string;
 	url: string = "";
-	lastSeen: Map<number, number> = new Map<number, number>();
-
+	lastSeen: { [key: number]: number} = {}
 
 	constructor(
 		private utils: UtilsService,
@@ -47,7 +46,7 @@ export class ParentsService {
 	}
 
 	getPTMById(id: number) {
-		this.lastSeen.set(id,new Date().getTime());
+		this.lastSeen[id] = new Date().getTime();
 		this.url = this.hostname + "/parents/ptms/" + id;
 		return this.http.get<ParentTeacherMeeting>(this.url, { headers: this.authService.headers });
 	}
@@ -63,12 +62,12 @@ export class ParentsService {
 	}
 
 
-	getFreeTeachers(id: number): any {
+	getFreeTeachers(id: number) {
 		this.url = this.hostname + "/parents/ptms/" + id + '/teachers';
 		return this.http.get<User[]>(this.url, { headers: this.authService.headers });
 	}
 
-	sendMails(id: number): any {
+	sendMails(id: number) {
 		this.url = this.hostname + "/parents/ptms/" + id;
 		return this.http.put<ServerResponse>(this.url, null, { headers: this.authService.headers });
 	}
@@ -160,7 +159,6 @@ export class ParentsService {
 		ptm.endRegistration = this.utilsService.toIonISOString(new Date(ptm.endRegistration))
 		return ptm
 	}
-
 
 	convertPtmTimes(ptm: ParentTeacherMeeting) {
 		ptm.start = new Date(ptm.start).valueOf().toString()

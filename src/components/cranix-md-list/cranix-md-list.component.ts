@@ -7,6 +7,7 @@ import { GenericObjectService } from '../../services/generic-object.service';
 import { LanguageService } from '../../services/language.service';
 import { UtilsService } from '../../services/utils.service';
 import { CranixNoticesComponent } from '../cranix-notices/cranix-notices.component'
+import { CrxNotice } from '../../models';
 
 @Component({
   selector: 'cranix-md-list',
@@ -18,7 +19,7 @@ export class CranixMdListComponent implements OnInit {
   min: number = -1;
   step: number = 3;
   max: number = 3;
-  rowData = [];
+  rowData: any[] = [];
   left1: string = "";
   left2: string = "";
   left3: string = "";
@@ -130,7 +131,7 @@ export class CranixMdListComponent implements OnInit {
     }
   }
 
-  checkChange(ev, dev) {
+  checkChange(ev: any, dev: any) {
     if (ev.detail.checked) {
       this.objectService.selectedIds.push(dev.id)
       this.objectService.selection.push(dev)
@@ -151,8 +152,7 @@ export class CranixMdListComponent implements OnInit {
     }
   }
 
-  subjectChanged(event) {
-    console.log(event)
+  subjectChanged(value: any) {
     let path = "/" + this.objectType + "s/all";
     //We do not read all challenges only the challenges from the selected
     if (this.objectType == 'challenge' && this.authService.selectedTeachingSubject) {
@@ -192,7 +192,7 @@ export class CranixMdListComponent implements OnInit {
     })
   }
 
-  async openNotice(object){
+  async openNotice(object: CrxNotice){
     const  modal = await this.modalController.create({
       component: CranixNoticesComponent,
       componentProps: {

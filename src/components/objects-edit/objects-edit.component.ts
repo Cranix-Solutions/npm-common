@@ -7,7 +7,7 @@ import { GenericObjectService } from '../../services/generic-object.service';
 import { LanguageService } from '../../services/language.service';
 import { UsersService } from '../../services/users.service';
 import { SystemService } from '../../services/system.service';
-import { SupportRequest, SoftwareVersion, SoftwareFullName } from '../models/data-model';
+import { SupportRequest, SoftwareVersion, SoftwareFullName } from '../../models/data-model';
 import { AuthenticationService } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { UtilsService } from '../../services/utils.service';
@@ -19,15 +19,15 @@ import { UtilsService } from '../../services/utils.service';
 export class ObjectsEditComponent implements OnInit {
   formData: FormData = new FormData();
   disabled: boolean = false;
-  fileToUpload: File = null;
+  fileToUpload?: File;
   result: any = {};
-  objectId: number;
+  objectId?: number;
   objectActionTitle: string = "";
-  fixedRole: string;
+  fixedRole?: string;
   labelPlacement: string = "stacked"
   toggleLabelPlacement: string = "start"
 
-  patterns = {
+  patterns: { [key: string]: { [key: string]: string } } = {
     'room': {
       'name': '\\S+'
     },
@@ -37,9 +37,9 @@ export class ObjectsEditComponent implements OnInit {
   }
 
   @Input() object: any
-  @Input() objectType: string
-  @Input() objectAction: string
-  @Input() objectKeys: string[]
+  @Input() objectType: string = ""
+  @Input() objectAction: string = ""
+  @Input() objectKeys: string[] = []
   constructor(
     private utilsS: UtilsService,
     public authService: AuthenticationService,
@@ -75,15 +75,15 @@ export class ObjectsEditComponent implements OnInit {
     this.disabled = false;
     if (this.objectAction != 'add' && this.objectType != 'settings') {
       let url = this.utilsS.hostName() + "/" + this.objectType + "s/" + this.object.id;
-      let sub = this.http.get(url, { headers: this.authService.headers }).subscribe(
-        (val) => {
+      this.http.get(url, { headers: this.authService.headers }).subscribe(
+        (val: any) => {
           for (let key of this.objectKeys) {
             if (this.objectService.typeOf(key, this.object, 'edit') == 'multivalued') {
               let s = val[key]
               this.object[key] = s.join()
             } else if (key == 'validity' || key == 'created' || key == 'validFrom' || key == 'validUntil' || key == 'modified') {
-              this.object[key] = new Date(val[key]).toJSON().replace(".000Z","");
-             } else {
+              this.object[key] = new Date(val[key]).toJSON().replace(".000Z", "");
+            } else {
               this.object[key] = val[key];
             }
           }
@@ -99,8 +99,8 @@ export class ObjectsEditComponent implements OnInit {
   }
 
   setNextDefaults() {
-    let subs = this.cephalixService.getNextDefaults().subscribe(
-      (val) => {
+    this.cephalixService.getNextDefaults().subscribe(
+      (val: any) => {
         for (let key of this.objectKeys) {
           if (!this.object[key] && val[key]) {
             this.object[key] = val[key];
@@ -118,8 +118,8 @@ export class ObjectsEditComponent implements OnInit {
     for (let key of this.objectKeys) {
       if (this.objectService.typeOf(key, this.object, 'edit') == 'multivalued') {
         let s: string = this.object[key];
-	      if(s) { this.object[key] = s.split(",") }
-       	else { this.object[key] = [] }
+        if (s) { this.object[key] = s.split(",") }
+        else { this.object[key] = [] }
       }
     }
     this.disabled = true;
@@ -155,35 +155,34 @@ export class ObjectsEditComponent implements OnInit {
     }
     for (let key of this.objectKeys) {
       if (this.objectService.typeOf(key, this.object, 'edit') == 'multivalued') {
-        this.object[key]  = this.object[key].join(',')
+        this.object[key] = this.object[key].join(',')
       }
     }
   }
 
-  handleFileInput(event) {
+  handleFileInput(event: any) {
     this.fileToUpload = event.target.files.item(0);
     console.log(this.fileToUpload)
   }
 
-  defaultAction(object) {
-    let subs = this.objectService.applyAction(object, this.objectType, this.objectAction).subscribe(
-      (val) => {
-        this.objectService.responseMessage(val);
-        if (val.code == "OK") {
-          this.objectService.getAllObject(this.objectType);
-          this.modalController.dismiss("succes");
-        } else {
+  defaultAction(object: string) {
+    if (object) {
+      this.objectService.applyAction(object, this.objectType, this.objectAction)?.subscribe({
+        next: (val) => {
+          this.objectService.responseMessage(val);
+          if (val.code == "OK") {
+            this.objectService.getAllObject(this.objectType);
+            this.modalController.dismiss("succes");
+          } else {
+            this.disabled = false;
+          }
+        },
+        error: (error) => {
+          this.objectService.errorMessage("A Server Error is accoured:" + error);
           this.disabled = false;
         }
-      },
-      (error) => {
-        this.objectService.errorMessage("A Server Error is accoured:" + error);
-        this.disabled = false;
-      },
-      () => {
-        subs.unsubscribe();
-      }
-    )
+      })
+    }
   }
   deleteObject() {
     this.objectService.deleteObjectDialog(this.object, this.objectType, '');
@@ -207,46 +206,45 @@ export class ObjectsEditComponent implements OnInit {
       }
     )
   }
-  userImport(object) {
-    let formData: FormData = new FormData();
-    formData.append('file', this.fileToUpload, this.fileToUpload.name);
-    formData.append('role', object.role);
-    formData.append('lang', object.lang);
-    formData.append('identifier', object.identifier);
-    formData.append('test', object.test ? "true" : "false");
-    formData.append('password', object.password);
-    formData.append('mustChange', object.mustChange ? "true" : "false");
-    formData.append('full', object.full ? "true" : "false");
-    formData.append('allClasses', object.allClasses ? "true" : "false");
-    formData.append('cleanClassDirs', object.cleanClassDirs ? "true" : "false");
-    formData.append('resetPassword', object.resetPassword ? "true" : "false");
-    formData.append('appendBirthdayToPassword', object.appendBirthdayToPassword ? "true" : "false");
-    formData.append('appendClassToPassword', object.appendClassToPassword ? "true" : "false");
-    console.log(object.test);
-    console.log(object.password);
-    console.log(this.formData.get("role"))
-    let subs = this.usersService.importUsers(formData).subscribe(
-      (val) => {
-        this.objectService.responseMessage(val);
-        if (val.code == "OK") {
-          this.modalController.dismiss("succes");
-        } else {
+  userImport(object: any) {
+    if (this.fileToUpload) {
+      let formData: FormData = new FormData();
+      formData.append('file', this.fileToUpload, this.fileToUpload.name);
+      formData.append('role', object.role);
+      formData.append('lang', object.lang);
+      formData.append('identifier', object.identifier);
+      formData.append('test', object.test ? "true" : "false");
+      formData.append('password', object.password);
+      formData.append('mustChange', object.mustChange ? "true" : "false");
+      formData.append('full', object.full ? "true" : "false");
+      formData.append('allClasses', object.allClasses ? "true" : "false");
+      formData.append('cleanClassDirs', object.cleanClassDirs ? "true" : "false");
+      formData.append('resetPassword', object.resetPassword ? "true" : "false");
+      formData.append('appendBirthdayToPassword', object.appendBirthdayToPassword ? "true" : "false");
+      formData.append('appendClassToPassword', object.appendClassToPassword ? "true" : "false");
+      console.log(object.test);
+      console.log(object.password);
+      console.log(this.formData.get("role"))
+      this.usersService.importUsers(formData)?.subscribe({
+        next: (val) => {
+          this.objectService.responseMessage(val);
+          if (val.code == "OK") {
+            this.modalController.dismiss("succes");
+          } else {
+            this.disabled = false;
+          }
+        },
+        error: (error) => {
+          console.log(error)
+          this.objectService.errorMessage("A Server Error is accoured:" + error);
           this.disabled = false;
         }
-      },
-      (error) => {
-        console.log(error)
-        this.objectService.errorMessage("A Server Error is accoured:" + error);
-        this.disabled = false;
-      },
-      () => {
-        subs.unsubscribe();
-      }
-    )
+      })
+    }
   }
 
-  getPattern(key: string){
-    if ( this.patterns[this.objectType] && this.patterns[this.objectType][key] ) {
+  getPattern(key: string) {
+    if (this.patterns[this.objectType] && this.patterns[this.objectType][key]) {
       return this.patterns[this.objectType][key]
     }
     return null;

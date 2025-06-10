@@ -8,6 +8,7 @@ export class UtilsService {
 
         double = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09']
         public okBrowser: boolean = true;
+        public actMdList: any = null;
         constructor() {
                 let tmp = window.navigator.userAgent
                 if (tmp.indexOf("Mozilla") != -1 && tmp.indexOf("Windows") != -1) {

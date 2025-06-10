@@ -31,7 +31,8 @@
 <ion-item>
   @if( objectType == 'challenge' ) {
   <cranix-search objectType="teachingSubject" [(ngModel)]="authService.selectedTeachingSubject"
-    [items]="crxObjectService.subjects" name="searchTeachingSubject" emptyLabel="teachingSubject">
+    [items]="crxObjectService.subjects" (onChange)="subjectChanged" name="searchTeachingSubject"
+     emptyLabel="teachingSubject">
   </cranix-search>
   }
   <ion-button expand="block" (click)="back()" [disabled]="min <= 0">

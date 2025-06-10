@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { AlertController } from '@ionic/angular'
-import { PTMEvent, PTMTeacherInRoom, ParentTeacherMeeting, Room, User } from '../models/data-model';
+import { PTMEvent, PTMTeacherInRoom, ParentTeacherMeeting, Room, User } from '../../models/data-model';
 import { AuthenticationService } from '../../services/auth.service';
 import { LanguageService } from '../../services/language.service';
 import { ParentsService } from '../../services/parents.service';
@@ -20,21 +20,21 @@ import { interval, takeWhile } from 'rxjs';
 export class CranixPtmViewComponent implements OnInit {
   alive: boolean = true
   context: any
-  ptmTeacherInRoom: PTMTeacherInRoom
-  ptm: ParentTeacherMeeting
+  ptmTeacherInRoom: PTMTeacherInRoom = new PTMTeacherInRoom()
+  ptm: ParentTeacherMeeting = new ParentTeacherMeeting()
   students: User[] = []
-  selectedStudent: User
-  freeRooms: Room[]
-  rowData = []
-  events = {}
-  eventsTeacherStudent = {}
-  eventsTimeStudent = {}
+  selectedStudent: User = new User()
+  freeRooms: Room[] = []
+  rowData: any[] = []
+  events: { [kye: number]: any} = {}
+  eventsTeacherStudent: { [key: number]: any} = {}
+  eventsTimeStudent: { [key: string]: any} = {}
   isOpened: boolean = true
   isPtmManager: boolean = false
   isRegisterRoomOpen: boolean = false
   isRegisterEventOpen: boolean = false
   isStudent: boolean = false
-  instituteName: string
+  instituteName: string = ""
   defaultColDef = {
     resizable: true,
     sortable: false,
@@ -43,14 +43,14 @@ export class CranixPtmViewComponent implements OnInit {
     suppressHeaderMenuButton: true,
     suppressMovable: true
   }
-  columnDefs = []
-  gridApi
-  selectedEvent: PTMEvent
+  columnDefs: any[] = []
+  gridApi: any
+  selectedEvent: PTMEvent = new PTMEvent()
   selectedEventRegistered: boolean = false
-  selectedPTMinRoom: PTMTeacherInRoom
+  selectedPTMinRoom?: PTMTeacherInRoom = new PTMTeacherInRoom()
   freeTeachers: User[] = []
   nativeWindow: any
-  @Input() id: number;
+  @Input() id: number = 0;
   constructor(
     public win: WindowRef,
     public alertController: AlertController,
@@ -100,7 +100,6 @@ export class CranixPtmViewComponent implements OnInit {
     })
   }
   readData(doColdef: boolean) {
-    console.log(this.selectedStudent)
     this.parentsService.getPTMById(this.id).subscribe(
       (val) => {
         this.ptm = val
@@ -161,13 +160,13 @@ export class CranixPtmViewComponent implements OnInit {
     }
     for (let ptmTeacherInRoom of this.ptm.ptmTeacherInRoomList) {
       this.eventsTeacherStudent[ptmTeacherInRoom.teacher.id] = {}
-      if (this.selectedStudent) {
+      if (this.selectedStudent.id) {
         //If student selected show only the corresponding teachers
         if (!this.selectedStudent.classIds.some(classId => ptmTeacherInRoom.teacher.classIds.includes(classId))) {
           continue
         }
       }
-      let roomEvents = {
+      let roomEvents: { [key: string]: any } = {
         teacher: ptmTeacherInRoom.teacher.surName + ', ' + ptmTeacherInRoom.teacher.givenName,
         room: ptmTeacherInRoom.room.description ? ptmTeacherInRoom.room.description : ptmTeacherInRoom.room.name,
         ptmId: ptmTeacherInRoom.id,
@@ -202,7 +201,7 @@ export class CranixPtmViewComponent implements OnInit {
       this.columnDefs = colDef
     }
     for (let teacher of this.freeTeachers) {
-      if (this.selectedStudent) {
+      if (this.selectedStudent.id) {
         //If student selected show only the corresponding teachers
         if (!this.selectedStudent.classIds.some(classId => teacher.classIds.includes(classId))) {
           continue
@@ -220,7 +219,7 @@ export class CranixPtmViewComponent implements OnInit {
     this.rowData = data
   }
 
-  onGridReady(params) {
+  onGridReady(params: any) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
   }
@@ -234,9 +233,9 @@ export class CranixPtmViewComponent implements OnInit {
       }
     }
   }
-  deselectStudent(selectStudentModal) {
+  deselectStudent(selectStudentModal: any) {
     selectStudentModal.close()
-    this.selectedStudent = null
+    this.selectedStudent = new User()
     this.readData(false)
   }
   registerEvent(event: PTMEvent) {
@@ -246,7 +245,7 @@ export class CranixPtmViewComponent implements OnInit {
     }
     this.selectedEvent = event
     this.selectedEventRegistered = this.selectedEvent.student != null
-    if (this.selectedStudent) {
+    if (this.selectedStudent.id) {
       if (!this.selectedEvent.student) {
         this.selectedEvent.student = this.selectedStudent
         this.doRegister()

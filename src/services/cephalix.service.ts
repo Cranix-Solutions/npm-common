@@ -46,13 +46,8 @@ export class CephalixService {
 	}
 
 	getInstituteToken(id: number) {
-		if(!this.authService.session) return 0
 		this.url = this.hostname + `/institutes/${id}/token`;
-		const headers = new HttpHeaders({
-			'Accept': 'text/plain',
-			'Authorization': "Bearer " + this.authService.session.token
-		});
-		return this.http.get(this.url, { headers: headers, responseType: 'text' });
+		return this.http.get<string>(this.url, { headers: this.authService.textHeaders });
 	}
 	getStatusOfInstitutes(): Observable<InstituteStatus[]> {
 		this.url = this.hostname + `/institutes/newestStatus`;

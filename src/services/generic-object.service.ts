@@ -628,4 +628,122 @@ export class GenericObjectService {
     return groups.map((group) => group.description).join(', ');
   }
 
+  filterObject(objectType: string, filter: string) {
+    let rowData = []
+    switch (objectType) {
+      case "adhocroom": {
+        for (let obj of this.allObjects[objectType]) {
+          if (
+            obj.name.toLowerCase().indexOf(filter) != -1 ||
+            obj.description.toLowerCase().indexOf(filter) != -1
+          ) {
+            rowData.push(obj)
+          }
+        }
+        break
+      }
+      case "device": {
+        for (let dev of this.allObjects[objectType]) {
+          if (this.selectedRoom && dev.roomId != this.selectedRoom) {
+            continue
+          }
+          if (
+            dev.name.toLowerCase().indexOf(filter) != -1 ||
+            dev.ip.indexOf(filter) != -1 ||
+            dev.mac.toLowerCase().indexOf(filter) != -1
+          ) {
+            rowData.push(dev)
+          }
+        }
+        break
+      }
+      case "education/user":
+        {
+          for (let obj of this.allObjects[objectType]) {
+            if (
+              obj.uid.toLowerCase().indexOf(filter) != -1 ||
+              obj.givenName.toLowerCase().indexOf(filter) != -1 ||
+              obj.surName.toLowerCase().indexOf(filter) != -1
+            ) {
+              rowData.push(obj)
+            }
+          }
+          break
+        }
+      case "education/group":
+      case "group": {
+        for (let obj of this.allObjects[objectType]) {
+          if (
+            obj.name.toLowerCase().indexOf(filter) != -1 ||
+            obj.description.toLowerCase().indexOf(filter) != -1 ||
+            this.languageS.trans(obj.groupType).toLowerCase().indexOf(filter) != -1
+          ) {
+            rowData.push(obj)
+          }
+        }
+        break
+      }
+      case "institute": {
+        for (let obj of this.allObjects[objectType]) {
+          if (
+            obj.name.toLowerCase().indexOf(filter) != -1 ||
+            (obj.regCode && obj.regCode.toLowerCase().indexOf(filter) != -1) ||
+            (obj.locality && obj.locality.toLowerCase().indexOf(filter) != -1)
+          ) {
+            rowData.push(obj)
+          }
+        }
+        break
+      }
+      case "printer": {
+        for (let dev of this.allObjects[objectType]) {
+          if (
+            dev.name.toLowerCase().indexOf(filter) != -1 ||
+            dev.model.indexOf(filter) != -1
+          ) {
+            rowData.push(dev)
+          }
+        }
+        break
+      }
+      case "room": {
+        for (let obj of this.allObjects[objectType]) {
+          if (
+            obj.name.toLowerCase().indexOf(filter) != -1 ||
+            obj.description.toLowerCase().indexOf(filter) != -1 ||
+            this.languageS.trans(obj.roomType).toLowerCase().indexOf(filter) != -1 ||
+            this.languageS.trans(obj.roomControl).toLowerCase().indexOf(filter) != -1
+          ) {
+            rowData.push(obj)
+          }
+        }
+        break
+      }
+      case "user": {
+        for (let obj of this.allObjects[objectType]) {
+          if (
+            obj.uid.toLowerCase().indexOf(filter) != -1 ||
+            obj.givenName.toLowerCase().indexOf(filter) != -1 ||
+            obj.surName.toLowerCase().indexOf(filter) != -1 ||
+            this.languageS.trans(obj.role).toLowerCase().indexOf(filter) != -1
+          ) {
+            rowData.push(obj)
+          }
+        }
+        break
+      } 
+      case "challenge":
+        case "challenges/todo": {
+          for (let obj of this.allObjects[objectType]) {
+            if (
+              obj.description.toLowerCase().indexOf(filter) != -1
+            ) {
+              rowData.push(obj)
+            }
+          }
+          break
+        }
+      }
+      return rowData
+    }  
 }

@@ -47,8 +47,8 @@ export class CrxSession {
         createDate?: Date;
         validFrom?: Date;
         validUntil?: Date;
-        userId?: number;
-        user?: User;
+        userId: number = 0;
+        user: User = new User();
         crx2faSession?: Crx2faSession;
         ip?: string;
         token?: string;

@@ -46,6 +46,7 @@ export class CrxObjectService {
                 return object
             }
         }
+        return new TeachingSubject();
     }
 
     /*

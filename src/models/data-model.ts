@@ -22,9 +22,9 @@ export class Partition {
 }
 
 export class User {
-	id?: number;
-	uid?: string = "";
-	uuid?: string = "";
+	id: number = 0;
+	uid: string = "";
+	uuid: string = "";
 	surName: string = "";
 	givenName: string = "";
 	birthDay?: string = "";
@@ -40,10 +40,10 @@ export class User {
 	mailAliases: string[] = [];
 	emailAddress?: string = ""
 	telefonNumber?: string = ""
-	childIds?: number[] = []
-	parentIds?: number[] = []
-	classIds?: number[] = []
-	otp?: string
+	childIds: number[] = []
+	parentIds: number[] = []
+	classIds: number[] = []
+	otp: string = ""
 	constructor() { }
 }
 export class UsersImport {
@@ -582,8 +582,8 @@ export class Parent extends User {
 
 export class PTMEvent {
 	id: number = 0
-	start?: Date 
-	end?: Date
+	start: Date| string = ""
+	end: Date| string = ""
 	blocked: boolean = false
 	parent?: User
 	student?: User
@@ -591,9 +591,9 @@ export class PTMEvent {
 
 export class PTMTeacherInRoom {
 	id: number = 0
-	room?: Room
-	teacher?: User
-	events?: PTMEvent[]
+	room: Room = new Room()
+	teacher: User = new User()
+	events: PTMEvent[] = []
 }
 
 export class ParentTeacherMeeting {

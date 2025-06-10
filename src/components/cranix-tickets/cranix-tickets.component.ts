@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GenericObjectService } from '../../services/generic-object.service';
-import { CrxTicket, CrxTicketArticle } from '../models/data-model';
+import { CrxTicket, CrxTicketArticle } from '../../models/data-model';
 import { CrxticketService } from '../../services/crxticket.service';
 import { AuthenticationService } from '../../services/auth.service';
 
@@ -12,7 +12,7 @@ import { AuthenticationService } from '../../services/auth.service';
 export class CranixTicketsComponent {
 
 
-  selectedTicket: CrxTicket
+  selectedTicket?: CrxTicket;
   tickets: CrxTicket[] = []
   articles: CrxTicketArticle[] = []
   manager: boolean = false;
@@ -23,19 +23,19 @@ export class CranixTicketsComponent {
     public objectService: GenericObjectService,
     private authService: AuthenticationService,
     private ticketService: CrxticketService
-  ){
+  ) {
     this.manager = this.authService.isAllowed('crxticket.manager')
     this.worker = this.authService.isAllowed('crxticket.worker')
   }
 
-  public loadData(){
-    if(this.manager || this.worker) {
+  public loadData() {
+    if (this.manager || this.worker) {
       this.ticketService.getTicketsForMe(this.requestedStatus).subscribe(
         (val) => {
           this.tickets = val
         }
       )
-    }else {
+    } else {
       this.ticketService.getMyTickets(this.requestedStatus).subscribe(
         (val) => {
           this.tickets = val
@@ -43,30 +43,34 @@ export class CranixTicketsComponent {
       )
     }
   }
-  public addTicket(){
-    this.ticketService.addTicket(this.selectedTicket).subscribe(
-      (val) => {
-        this.objectService.responseMessage(val)
-      }
-    )
+  public addTicket() {
+    if (this.selectedTicket) {
+      this.ticketService.addTicket(this.selectedTicket).subscribe(
+        (val) => {
+          this.objectService.responseMessage(val)
+        }
+      )
+    }
   }
-  public openAddTicket(){
+  public openAddTicket() {
     this.selectedTicket = new CrxTicket()
   }
 
-  public closeTicket(){
-    this.ticketService.closeTicket(this.selectedTicket.id).subscribe(
-      (val) => {
-        delete this.selectedTicket;
-        this.objectService.responseMessage(val)
-      }
-    )
+  public closeTicket() {
+    if (this.selectedTicket) {
+      this.ticketService.closeTicket(this.selectedTicket.id).subscribe(
+        (val) => {
+          delete this.selectedTicket;
+          this.objectService.responseMessage(val)
+        }
+      )
+    }
   }
-  public closeTicketModal(){
+  public closeTicketModal() {
     delete this.selectedTicket;
   }
 
-  public selectTicket(ticket: CrxTicket){
+  public selectTicket(ticket: CrxTicket) {
     this.ticketService.getArticles(ticket.id).subscribe(
       (val) => {
         this.articles = val

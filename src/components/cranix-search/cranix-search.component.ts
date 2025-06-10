@@ -14,39 +14,34 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class CranixSearchComponent implements ControlValueAccessor, OnInit {
   isCranixSearchModalOpen: boolean = false;
-  rowData = []
+  rowData: any[] = []
   selection: any|any[]
 
   @Output() callback = new EventEmitter<any>();
   @Output() onChange: EventEmitter<{ value: any }> = new EventEmitter();
-  @Input({ required: true }) objectType: string
-  @Input() context
-  @Input() items: any[]
-  @Input() itemTextField: string|string[]
-  @Input() multiple: boolean
-  @Input() emptyLabel: string
-  @Input() selectedLabel: string
+  @Input({ required: true }) objectType: string = "user"
+  @Input() context: any = ""
+  @Input() items: any[] = []
+  @Input() itemTextField: string|string[] = ["name"]
+  @Input() multiple: boolean = false
+  @Input() emptyLabel: string = "undefined"
+  @Input() selectedLabel: string = "undefined"
   constructor(
     private objectService: GenericObjectService
   ) { }
 
   ngOnInit(): void {
     console.log("CranixSearchComponent")
-    if (typeof this.items == "undefined") {
+    if (this.items.length == 0) {
       this.items = this.objectService.allObjects[this.objectType]
     }
-    if (typeof this.multiple == "undefined") {
-      this.multiple = false;
-    }
-    if (typeof this.itemTextField == "undefined") {
-      this.itemTextField = ["name"];
-    }else if( typeof this.itemTextField  == "string") {
+    if( typeof this.itemTextField  == "string") {
       this.itemTextField = [this.itemTextField]
     }
-    if( typeof this.emptyLabel == "undefined"){
+    if( this.emptyLabel == "undefined"){
       this.emptyLabel = 'Select ' + this.objectType
     }
-    if( typeof this.selectedLabel == "undefined"){
+    if( this.selectedLabel == "undefined"){
       this.selectedLabel = this.objectType + ' selected.'
     }
     if (this.multiple) {
@@ -72,17 +67,17 @@ export class CranixSearchComponent implements ControlValueAccessor, OnInit {
   openModal() {
     this.isCranixSearchModalOpen = true
   }
-  closeModal(modal){
+  closeModal(modal: any){
     modal.dismiss();
     this.isCranixSearchModalOpen = false
   }
   isSelected(id: number) {
     if (this.selection) {
-      return this.selection.filter(o => o.id == id).length == 1
+      return this.selection.filter((o: any) => o.id == id).length == 1
     }
     return false;
   }
-  clearSelection(modal){
+  clearSelection(modal: any){
     if(this.multiple){
       this.selection = []
     }else{
@@ -93,7 +88,7 @@ export class CranixSearchComponent implements ControlValueAccessor, OnInit {
       this.closeModal(modal)
     }
   }
-  select(o: any, modal) {
+  select(o: any, modal: any) {
     console.log(o)
     this.selection = o;
     this.propagateOnChange(this.selection);
@@ -104,14 +99,14 @@ export class CranixSearchComponent implements ControlValueAccessor, OnInit {
     this.closeModal(modal)
   }
   doSelect(o: any) {
-    if(this.selection.filter(obj => obj.id == o.id).length == 1){
-      this.selection = this.selection.filter(obj => obj.id != o.id)
+    if(this.selection.filter((obj: any) => obj.id == o.id).length == 1){
+      this.selection = this.selection.filter((obj: any) => obj.id != o.id)
     } else {
       this.selection.push(o)
     }
     console.log(this.selection)
   }
-  returnValues(modal){
+  returnValues(modal: any){
     this.propagateOnChange(this.selection);
     this.isCranixSearchModalOpen = false
     if(this.callback){

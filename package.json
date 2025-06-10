@@ -32,6 +32,7 @@
     "@ionic/angular": "",
     "@ionic/storage-angular": "",
     "@ngx-translate/core":"",
+    "ag-grid-angular": "",
     "rrule": "",
     "sprintf-js": ""
   },
