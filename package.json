@@ -1,6 +1,6 @@
 {
   "name": "cranix-common",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Common npm services, models and tools for CRANIX/CEPHALIX ",
   "main": "index.js",
   "scripts": {
