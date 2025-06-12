@@ -76,7 +76,7 @@ export class AuthenticationService {
             if (myCranixSettings && myCranixSettings != "") {
                 console.log("myCranixSettings");
                 let myCranixSettingsHash = <Settings>JSON.parse(myCranixSettings);
-                this.settings = { ...this.settings,  ...myCranixSettingsHash}
+                this.settings = { ...this.settings, ...myCranixSettingsHash }
                 console.log(this.settings);
             }
         });
@@ -299,11 +299,11 @@ export class AuthenticationService {
     /**
      * Delivers the token of the session.
      */
-    public getToken() {
+    public getToken(): string {
         if (this.session) {
             return this.session.token;
         }
-        return null;
+        return "";
     }
 
     /**
@@ -399,6 +399,13 @@ export class AuthenticationService {
         return window.innerWidth + "x" + window.innerHeight
     }
 
+    public log(args: any) {
+        var dev = isDevMode();
+        //console.log(dev);
+        if (dev) {
+            console.log(args);
+        }
+    }
     async showInfo() {
         const toast = this.toastController.create({
             position: "middle",

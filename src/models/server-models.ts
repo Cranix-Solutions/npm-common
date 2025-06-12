@@ -51,7 +51,7 @@ export class CrxSession {
         user: User = new User();
         crx2faSession?: Crx2faSession;
         ip?: string;
-        token?: string;
+        token: string = "";
         gotoPath?: string;
         role?: string;
         password?: string;

@@ -1,6 +1,6 @@
 {
   "name": "cranix-common",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "Common npm services, models and tools for CRANIX/CEPHALIX ",
   "main": "index.js",
   "scripts": {
@@ -33,6 +33,8 @@
     "@ionic/storage-angular": "",
     "@ngx-translate/core":"",
     "ag-grid-angular": "",
+    "ag-grid-community":"",
+    "angular-csv-ext":"",
     "rrule": "",
     "sprintf-js": ""
   },

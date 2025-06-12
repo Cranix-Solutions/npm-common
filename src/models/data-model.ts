@@ -108,7 +108,7 @@ export class Room {
 }
 
 export class Group {
-	id?: number = 0;
+	id: number = 0;
 	name: string = "";
 	description: string = "";
 	groupType: string = "";
@@ -132,7 +132,7 @@ export class SoftwareFullName {
 	fullName: string = "";
 }
 export class Software {
-	id?: number;
+	id: number = 0;
 	name: string = "";
 	description: string = "";
 	weight: number = 0;
@@ -175,7 +175,7 @@ export class InstallStateDev {
 }
 
 export class License {
-	id?: number;
+	id: number = 0;
 	softwareId: number = 0;
 	licenseType: string = "";
 	count: number = 0;
@@ -184,7 +184,7 @@ export class License {
 	constructor() { }
 }
 export class Device {
-	id?: number;
+	id: number = 0;
 	name: string = "";
 	place?: number = 0;
 	row?: number = 0;
@@ -203,7 +203,7 @@ export class Device {
 	constructor() { }
 }
 export class Printer {
-	id?: number;
+	id: number = 0;
 	name: string = "";
 	ip: string = "";
 	deviceName: string = "";
@@ -227,7 +227,7 @@ export class Drivers {
 	constructor() { }
 }
 export class Installation {
-	id?: number;
+	id: number = 0;
 	name?: string = "";
 	description?: string = "";
 	categoryType?: string = "";
@@ -239,7 +239,7 @@ export class Installation {
 }
 
 export class Permission {
-	id?: number;
+	id: number = 0;
 	acl: string = "";
 	allowed: boolean = false;
 	userId?: number = 0;
@@ -248,7 +248,7 @@ export class Permission {
 }
 
 export class AccessStatus {
-	id?: number;
+	id: number = 0;
 	accessType?: string = "";
 	action?: string = "";
 	roomId: any = null;
@@ -270,7 +270,7 @@ export class AccessStatus {
 }
 
 export class Announcenement {
-	id?: number;
+	id: number =0;
 	issue: string = "";
 	keywords: string = "";
 	text: string = "";
@@ -283,7 +283,7 @@ export class Announcenement {
 }
 
 export class TaskResponse {
-	id?: number;
+	id: number = 0;
 	parentId: number = 0;
 	creatorId: number = 0;
 	text: string = "";
@@ -294,7 +294,7 @@ export class TaskResponse {
 }
 
 export class FAQ {
-	id?: number;
+	id: number = 0;
 	abstract: string = "";
 	issue: string = "";
 	text: string = "";
@@ -304,7 +304,7 @@ export class FAQ {
 }
 
 export class Contact {
-	id?: number;
+	id: number = 0;
 	email: string = "";
 	issue: string = "";
 	name: string = "";
@@ -340,6 +340,8 @@ export class SupportRequest {
 	requestDate?: number = 0;
 	ticketno?: number = 0;
 	ticketResponseInfo?: string = "";
+	attachment: string = "";
+	attachmentName: string = "";
 	constructor() { }
 }
 
@@ -352,7 +354,7 @@ export class DNSRecord {
 }
 
 export class GuestUsers {
-	id?: number;
+	id: number = 0;
 	name: string = "";
 	description: string = "";
 	count: number = 0;
@@ -408,7 +410,7 @@ export class CrxConfig {
 }
 
 export class EduRoom {
-	id?: number;
+	id: number = 0;
 	name: string = "";
 	description: string = "";
 	hwconfId: number = 0;
@@ -427,7 +429,7 @@ export class EduRoom {
 }
 
 export interface SmartRoom {
-	id?: number,
+	id: number,
 	name: string,
 	description: string,
 	validFrom?: number,
@@ -448,7 +450,7 @@ export interface SmartRoomStatus {
 
 
 export class PositivList {
-	id?: number = 0;
+	id: number = 0;
 	name: string = "";
 	description: string = "";
 	subject: string = "";
@@ -457,7 +459,7 @@ export class PositivList {
 }
 
 export interface AccessStatus {
-	id?: number,
+	id: number,
 	accessType?: string,
 	action?: string,
 	roomId: any,
@@ -493,7 +495,7 @@ export class TeachingSubject {
 }
 
 export class CrxQuestionAnswer {
-	id?: number
+	id: number = 0
 	answer?: string = ""
 	correct: boolean = false
 	constructor(answer?: string) {
@@ -502,7 +504,7 @@ export class CrxQuestionAnswer {
 }
 
 export class CrxQuestion {
-	id?: number = 0;
+	id: number = 0;
 	question?: string = ""
 	answerType: string = ""
 	value: number = 1
