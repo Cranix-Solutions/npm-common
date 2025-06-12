@@ -1,0 +1,41 @@
+<ion-header translucent>
+  <ion-toolbar color="primary">
+    <ion-title>{{ 'Select softwares to download' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" size="small" (click)="startDownload()" [disabled]="dsabled">
+        <ion-icon slot="icon-only" color="primary" name="cloud-download"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" size="small" (click)="closeWindow()" [disabled]="dsabled">
+        <ion-icon slot="icon-only" color="danger" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <ion-list>
+    <ion-list-header>
+      <ion-item>
+        <ion-input placeholder="{{'search' | translate }}" (input)="packagFilterChanged()" id="packageFilter">
+        </ion-input>
+      </ion-item>
+    </ion-list-header>
+    <ion-item>
+      <ion-note></ion-note>
+      <ion-label>{{'name'|translate}}</ion-label>
+      <ion-note>{{'version'|translate}} </ion-note>
+    </ion-item>
+    @for(o of rowData; track o){
+    <ion-item>
+      <ion-note slot="start">
+        <ion-checkbox (ionChange)="toogleSelect(o)" [disabled]="dsabled"></ion-checkbox>
+      </ion-note>
+      <ion-label>
+        {{o.name}}
+      </ion-label>
+      <ion-note slot="end">
+        {{o.version}}
+      </ion-note>
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>

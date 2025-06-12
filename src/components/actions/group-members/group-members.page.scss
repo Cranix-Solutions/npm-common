@@ -1,0 +1,35 @@
+.button-container {
+    height: 68vh; /* 50% der Viewport-Höhe */
+    overflow-y: auto; /* Bei Überlauf scrollbar machen */
+    border: 1px solid #ccc; /* Optional: Rahmen für Sichtbarkeit */
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  /* Style für Buttons (optional) */
+  .button-container button {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+    padding: 10px;
+    font-size: 14px;
+    text-align: left;
+  }
+
+  /* + Zeichen vor dem Button-Text */
+  button.pluss::before {
+    content: "+ ";
+    margin-right: 5px; /* Abstand zum Text */
+    color: green; /* Optional, Farbe des + Zeichens */
+  }
+
+  button.minus::before {
+    content: "- ";
+    margin-right: 5px; /* Abstand zum Text */
+    color: red; /* Optional, Farbe des + Zeichens */
+  }
+
+ion-accordion.accordion-expanding ion-item[slot="header"],
+ion-accordion.accordion-expanded ion-item[slot="header"] {
+  --color: red;
+}

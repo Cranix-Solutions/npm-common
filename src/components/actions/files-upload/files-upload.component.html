@@ -1,0 +1,35 @@
+<form #uploadFile="ngForm" (ngSubmit)="onSubmit()">
+  <ion-header translucent>
+    <ion-toolbar>
+      <ion-title>{{ 'Upload files' | translate }} {{ target1 }}</ion-title>
+      <ion-title>{{ target }}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button type="submit" class="ion-no-margin" fill="clear" size="small" [disabled]="!uploadFile.valid">
+          <ion-icon slot="icon-only" color="success" name="checkmark-sharp"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" size="small" (click)="modalController.dismiss()">
+          <ion-icon slot="icon-only" color="danger" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content fullscreen>
+    <ion-list>
+      <ion-item>
+        <ion-input type="file" multiple (change)="onFilesAdded($event)" (change)="onFilesAdded($event)">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="start"><div innerHTML="{{'cleanUp'| translate}}"></div></ion-label>
+        <ion-checkbox position="end" [(ngModel)]="cleanUp" name="cleanUp"></ion-checkbox>
+      </ion-item>
+      <ion-item *ngIf="objectType == 'group'">
+        <ion-label position="start">{{'studentsOnly'| translate}}</ion-label>
+        <ion-checkbox position="end" [(ngModel)]="studentsOnly" name="studentsOnly"></ion-checkbox>
+      </ion-item>
+      <ion-item>
+        <div innerHTML="{{'For students and guest users the will be cleaned up anyway.'| translate}}"></div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</form>

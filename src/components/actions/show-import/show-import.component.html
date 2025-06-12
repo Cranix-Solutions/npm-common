@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-card>
+    <ion-toolbar>
+      <ion-card-title>{{import.startTime}} {{'role' | translate}}: {{import.role | translate}}</ion-card-title>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" size="small" (click)="closeWindow()">
+          <ion-icon slot="icon-only" color="danger" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar>
+      <ion-card-subtitle>
+        {{'identifier' | translate }}: {{import.identifier | translate}}<br>
+        {{'password' | translate}}: "{{import.password}}"<br>
+        {{'resetPassword' | translate}}:  {{import.resetPassword}}<br>
+        {{'mustChange' | translate}}: {{import.mustChange}}<br>
+        {{'full' | translate}}:  {{import.full}}<br>
+        {{'allClasses' | translate}}: {{import.allClasses}}<br>
+        {{'cleanClassDirs' | translate}}: {{import.cleanClassDirs}}<br>
+        {{'appendBirthdayToPassword' | translate}}: {{import.appendBirthdayToPassword}}<br>
+        {{'appendClassToPassword' | translate}}: {{import.appendClassToPassword}}<br>
+      </ion-card-subtitle>
+    </ion-toolbar>
+  </ion-card>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>
+        {{'Content of the log' | translate}}
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <div [innerHTML]="import.result"></div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
