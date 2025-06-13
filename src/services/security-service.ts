@@ -9,7 +9,7 @@ import { AuthenticationService } from './auth.service';
 import { GenericObjectService } from './generic-object.service';
 import { LanguageService } from './language.service';
 import { ServerResponse } from '../models/server-models';
-import { AccessInRoom, IncomingRules, OutgoingRule, RemoteRule, SafeSearch } from '../models/secutiry-model';
+import { AccessInRoom, IncomingRules, OutgoingRule, RemoteRule, SafeSearch } from '../models/security-model';
 import { Room } from '../models/data-model';
 
 @Injectable()
@@ -56,7 +56,7 @@ export class SecurityService {
     return this.http.get<any[]>(this.url, { headers: this.authService.headers });
   }
 
-  setProxyBasic(acls: []){
+  setProxyBasic(acls: any[]){
     this.url = this.hostname + `/system/proxy/basic`;
     console.log(this.url);
     return this.http.post<ServerResponse>(this.url, acls, { headers: this.authService.headers });
@@ -78,7 +78,7 @@ export class SecurityService {
     return this.http.get(this.url, { headers: this.authService.textHeaders, responseType: 'text' });
   }
 
-  setActiveUnboundLists(lists: []) {
+  setActiveUnboundLists(lists: string) {
     this.url = this.hostname + "/system/configuration";
     console.log(this.url);
     let temp = { "key": "UNBOUND_LISTS", "value": lists }

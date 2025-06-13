@@ -51,6 +51,16 @@ export class ParentsService {
 		return this.http.get<ParentTeacherMeeting>(this.url, { headers: this.authService.headers });
 	}
 
+	getPTMSettings(){
+		this.url = this.hostname + "/parents/ptms/settings";
+		return this.http.get<any>(this.url, { headers: this.authService.headers });
+	}
+
+	setPTMSettings(settings: { [key:string]: string }){
+		this.url = this.hostname + "/parents/ptms/settings";
+		return this.http.post<ServerResponse>(this.url, settings, { headers: this.authService.headers });
+	}
+
 	getLastChange(id: number){
 		this.url = this.hostname + "/parents/ptms/" + id + "/lastChange";
 		return this.http.get<Date>(this.url, { headers: this.authService.headers });
@@ -152,13 +162,14 @@ export class ParentsService {
 		return this.http.delete<ServerResponse>(this.url, { headers: this.authService.headers });
 	}
 
-	adaptPtmTimes(ptm: ParentTeacherMeeting) {
+	adaptPtmTimes(ptm: ParentTeacherMeeting): ParentTeacherMeeting {
 		ptm.start = this.utilsService.toIonISOString(new Date(ptm.start))
 		ptm.end = this.utilsService.toIonISOString(new Date(ptm.end))
 		ptm.startRegistration = this.utilsService.toIonISOString(new Date(ptm.startRegistration))
 		ptm.endRegistration = this.utilsService.toIonISOString(new Date(ptm.endRegistration))
 		return ptm
 	}
+
 
 	convertPtmTimes(ptm: ParentTeacherMeeting) {
 		ptm.start = new Date(ptm.start).valueOf().toString()

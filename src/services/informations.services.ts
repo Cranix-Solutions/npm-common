@@ -113,7 +113,7 @@ export class InformationsService {
         return this.http.post<ServerResponse>(this.url, taskResponse, { headers: this.authService.headers })
     }
 
-    addResponse(task: Announcenement) {
+    addResponse(task: TaskResponse) {
         this.url = `${this.hostname}/selfmanagement/taskResponses`;
         console.log(this.url)
         return this.http.post<ServerResponse>(this.url, task, { headers: this.authService.headers })

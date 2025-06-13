@@ -3,12 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthenticationService } from './auth.service';
 import { UtilsService } from './utils.service';
 import { Crx2fa, ServerResponse } from '../models/server-models';
-import { User, Device, Room } from '../models/data-model';
+import { Device, IdRequest, Room, User } from '../models/data-model';
 
 @Injectable()
 export class SelfManagementService {
 
-    hostname: string;
+    hostname: string = "";
     url: string = "";
 
     constructor(
@@ -83,7 +83,6 @@ export class SelfManagementService {
         return this.http.post<ServerResponse>(url, dev, { headers: this.authService.headers });
     }
 
-    //Delete
     removeDevice(devId: number) {
         const url = this.hostname + `/selfmanagement/devices/${devId}`;
         console.log(url);
@@ -132,5 +131,23 @@ export class SelfManagementService {
             token: this.authService.token
         }
         return this.http.post<ServerResponse>(url, data, { headers: this.authService.anonHeaders });
+    }
+
+    addEditIdRequest(idRequests: IdRequest) {
+        const url = this.hostname + '/idRequests/my';
+        console.log(url);
+        return this.http.post<ServerResponse>(url, idRequests, { headers: this.authService.headers });
+    }
+
+    getMyIdRequest() {
+        const url = this.hostname + '/idRequests/my';
+        console.log(url);
+        return this.http.get<IdRequest>(url, { headers: this.authService.headers });
+    }
+
+    deleteMyIdRequest(id: number) {
+        const url = `${this.hostname}/idRequests/${id}`;
+        console.log(url);
+        return this.http.delete<ServerResponse>(url, { headers: this.authService.headers });
     }
 }

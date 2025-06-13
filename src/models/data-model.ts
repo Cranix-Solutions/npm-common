@@ -1,3 +1,4 @@
+import { AccessInRoom } from './security-model';
 import { Frequency, RRule } from 'rrule';
 
 export class Hwconf {
@@ -65,28 +66,6 @@ export class UsersImport {
 	constructor() { }
 }
 
-export class AccessInRooms {
-	id?: number;
-	accessType: string = "";
-	action?: string = "";
-	roomId: number = 0;
-	monday?: boolean = false;
-	tuesday?: boolean = false;
-	wednesday?: boolean = false;
-	thursday?: boolean = false;
-	friday?: boolean = false;
-	saturday?: boolean = false;
-	sunday?: boolean = false;
-	holiday?: boolean = false;
-	direct: boolean = false;
-	login: boolean = false;
-	portal: boolean = false;
-	printing: boolean = false;
-	proxy: boolean = false;
-	pointInTime?: string = "";
-	constructor() { }
-}
-
 export class Room {
 	id: number = 0;
 	name: string = "";
@@ -103,7 +82,7 @@ export class Room {
 	network: string = "";
 	places: number = 0;
 	rows: number = 0;
-	accessInRooms?: AccessInRooms[] = [];
+	accessInRooms?: AccessInRoom[] = [];
 	constructor() { }
 }
 
@@ -244,28 +223,6 @@ export class Permission {
 	allowed: boolean = false;
 	userId?: number = 0;
 	groupId?: number = 0;
-	constructor() { }
-}
-
-export class AccessStatus {
-	id: number = 0;
-	accessType?: string = "";
-	action?: string = "";
-	roomId: any = null;
-	monday?: boolean = false;
-	tuesday?: boolean = false;
-	wednesday?: boolean = false;
-	thursday?: boolean = false;
-	friday?: boolean = false;
-	saturday?: boolean = false;
-	sunday?: boolean = false;
-	holiday?: boolean = false;
-	direct: boolean = false;
-	login: boolean = false;
-	portal: boolean = false;
-	printing: boolean = false;
-	proxy: boolean = false;
-	pointInTime?: string = "";
 	constructor() { }
 }
 
@@ -424,7 +381,7 @@ export class EduRoom {
 	network: string = "";
 	places: number = 0;
 	rows: number = 0;
-	accessInRooms?: AccessInRooms;
+	accessInRooms?: AccessInRoom;
 	constructor() { }
 }
 
@@ -456,27 +413,6 @@ export class PositivList {
 	subject: string = "";
 	domains: string = "";
 	constructor() { }
-}
-
-export interface AccessStatus {
-	id: number,
-	accessType?: string,
-	action?: string,
-	roomId: any,
-	monday?: boolean,
-	tuesday?: boolean,
-	wednesday?: boolean,
-	thursday?: boolean,
-	friday?: boolean,
-	saturday?: boolean,
-	sunday?: boolean,
-	holiday?: boolean,
-	direct: boolean,
-	login: boolean,
-	portal: boolean,
-	printing: boolean,
-	proxy: boolean,
-	pointInTime?: string
 }
 
 export class SubjectArea {

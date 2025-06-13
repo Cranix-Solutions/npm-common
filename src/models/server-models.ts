@@ -61,7 +61,7 @@ export class CrxSession {
         acls: string[] = [];
         fullName?: string;
         name?: string;
-        roomId?: string;
+        roomId?: number;
         roomName?: string;
         instituteName?: string | null;
         mustSetup2fa?: boolean;

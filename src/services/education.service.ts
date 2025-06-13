@@ -1,14 +1,9 @@
-//import { Category } from './../data-model';
-//import { AccessStatus } from '../data-model';
-//import { ServerResponse } from 'app/main/shared/data-model';
-//import { Observable } from 'rxjs/Observable';
-//import { Device, Room, User, Group } from '../data-model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UtilsService } from './utils.service';
 import { BehaviorSubject } from 'rxjs';
-//import { ServerResponse } from 'http';
-import { AccessStatus, Room, Device, PositivList, SmartRoom, SmartRoomStatus, EduRoom, GuestUsers } from '../models/data-model';
+import { Room, Device, PositivList, SmartRoom, SmartRoomStatus, EduRoom, GuestUsers } from '../models/data-model';
+import { AccessInRoom } from '../models/security-model';
 import { ServerResponse } from '../models/server-models';
 import { AuthenticationService } from './auth.service';
 import { GenericObjectService } from './generic-object.service';
@@ -95,7 +90,7 @@ export class EductaionService {
 	}
 	//Calls on Rooms 
 
-	setAccessStatus(status: AccessStatus) {
+	setAccessStatus(status: AccessInRoom) {
 		this.url = `${this.hostname}/education/rooms/${status.roomId}/accessStatus`;
 		return this.http.post<ServerResponse>(this.url, status, { headers: this.authService.headers });
 	}

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UtilsService } from './utils.service';
-import { Room, AccessStatus, Printer, Hwconf } from '../models/data-model';
+import { Room, Printer, Hwconf } from '../models/data-model';
+import { AccessInRoom } from '../models/security-model';
 import { ServerResponse } from '../models/server-models';
 import { AuthenticationService } from './auth.service';
 
@@ -34,13 +35,13 @@ export class RoomsService {
 	}
 
 
-	setAccessRoom(access: AccessStatus) {
+	setAccessRoom(access: AccessInRoom) {
 		const body = access;
 		this.url = `${this.hostname}/rooms/${access.roomId}/accessStatus`;
 		return this.http.post<ServerResponse>(this.url, body, { headers: this.authService.headers });
 	}
 
-	setSheduleRoom(access: AccessStatus) {
+	setSheduleRoom(access: AccessInRoom) {
 		const body = access;
 		this.url = `${this.hostname}/rooms/${access.roomId}/accessList`;
 		return this.http.post<ServerResponse>(this.url, body, { headers: this.authService.headers });
@@ -104,11 +105,11 @@ export class RoomsService {
 
 	getRoomAccessStatus(room: number) {
 		this.url = `${this.hostname}/rooms/${room}/accessStatus`;
-		return this.http.get<AccessStatus>(this.url, { headers: this.authService.headers });
+		return this.http.get<AccessInRoom>(this.url, { headers: this.authService.headers });
 	}
 	getRoomAccessList(room: number) {
 		this.url = `${this.hostname}/rooms/${room}/accessList`;
-		return this.http.get<AccessStatus[]>(this.url, { headers: this.authService.headers });
+		return this.http.get<AccessInRoom[]>(this.url, { headers: this.authService.headers });
 	}
 
 	getAccessTypes() {

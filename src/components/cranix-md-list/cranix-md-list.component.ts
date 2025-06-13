@@ -7,7 +7,7 @@ import { GenericObjectService } from '../../services/generic-object.service';
 import { LanguageService } from '../../services/language.service';
 import { UtilsService } from '../../services/utils.service';
 import { CranixNoticesComponent } from '../cranix-notices/cranix-notices.component'
-import { CrxNotice } from '../../models';
+import { CrxNotice } from '../../models/data-model';
 
 @Component({
   selector: 'cranix-md-list',

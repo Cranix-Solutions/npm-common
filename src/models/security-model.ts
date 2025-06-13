@@ -5,7 +5,7 @@ export class IncomingRules {
 }
 
 export class OutgoingRule {
-    id?: number = 0;
+    id: number = 0;
     type: string = "room";
     name: string="";
     dest: string ="0/0";
@@ -15,7 +15,7 @@ export class OutgoingRule {
 }
 
 export class RemoteRule {
-    id?: number;
+    id: number = 0;
     name: string="";
     ext: string="";
     port: string ="";
@@ -23,7 +23,7 @@ export class RemoteRule {
 }
 
 export class AccessInRoom  {
-    id?: number; 
+    id: number= 0; 
     roomId: number = 0;
     pointInTime: string ="06:00";
     accessType: string ="DEF";
