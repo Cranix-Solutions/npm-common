@@ -178,7 +178,7 @@ export class Device {
 	roomId?: any = null;
 	screenShot?: string;
 	loggedInId?: number;
-	loggedInName?: number;
+	loggedInName?: string;
 	constructor() { }
 }
 export class Printer {

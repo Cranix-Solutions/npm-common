@@ -31,7 +31,7 @@
     "@angular/router": "",
     "@ionic/angular": "",
     "@ionic/storage-angular": "",
-    "@ngx-translate/core":"",
+    "@ngx-translate/core":"^16.0.0",
     "ag-grid-angular": "",
     "ag-grid-community":"",
     "angular-csv-ext":"",
